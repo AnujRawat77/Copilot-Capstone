@@ -1,4 +1,5 @@
 # Software Requirements Specification
+
 ## Agentic SDLC — Java To-Do Application
 
 | Document Information | Value |
@@ -6,7 +7,7 @@
 | Project Name | Agentic SDLC — Java To-Do Application |
 | Document | Software Requirements Specification |
 | Version | 1.0 |
-| Status | Initial Baseline — Pending Review |
+| Status | Approved by developer on 2026-11-04 |
 | Application Type | Terminal-based Java application |
 | Language | Java 21 |
 | Build Tool | Maven |
@@ -389,19 +390,30 @@ The application shall handle task IDs that do not correspond to an existing task
 
 ### Expected Behavior
 
-When the user provides a non-existent task ID during a task operation, the application shall display the required error message and remain operational.
+For a numeric task ID that does not identify an existing task, the application shall display the required error message and remain operational. If the user enters a non-numeric task ID while completing or deleting a task, the application shall display a helpful input error, leave all task data unchanged, and return to the menu.
 
 ### Acceptance Criteria
 
 - **AC-006.1:** The application identifies when a requested task ID does not exist.
+
 - **AC-006.2:** The application displays the exact error message:
 
-  `Task ID not found`
+    `Task ID not found`
 
 - **AC-006.3:** The application does not terminate after displaying the error.
+
 - **AC-006.4:** The user can continue interacting with the application after the error.
+
 - **AC-006.5:** An invalid task ID does not modify unrelated tasks.
+
 - **AC-006.6:** The invalid-ID behavior applies to task operations that require an existing task ID, including completing and deleting tasks.
+
+- **AC-006.7:** A non-numeric task ID entered during completion or deletion produces a helpful input error and does not terminate the application.
+
+- **AC-006.8:** A non-numeric task ID does not modify, add, or delete any task data.
+
+- **AC-006.9:** After a non-numeric task ID is handled, the application returns to the interactive menu.
+
 
 ### Related Requirements
 
@@ -618,6 +630,7 @@ The application shall store task data in memory only.
 - Human approval shall remain part of the workflow.
 - The workflow shall not rely solely on generated claims of success.
 - Verification shall include actual build and test execution where applicable.
+- The Orchestrator shall coordinate final verification using Testing Agent results and Code Review findings; a separate Verification Agent is not required.
 
 ---
 
@@ -675,7 +688,7 @@ This matrix links functional requirements to the primary verification activities
 | FR-003: Mark Task Complete | Test completion of an existing task and invalid task ID behavior |
 | FR-004: Delete Task | Test deletion of an existing task and invalid task ID behavior |
 | FR-005: Exit Application | Test that selecting Exit terminates the menu loop |
-| FR-006: Invalid ID Handling | Test exact error message and continued application operation |
+| FR-006: Invalid ID Handling | Test service handling of numeric non-existent IDs and unchanged task data; test the UI for the exact `Task ID not found` message, and for non-numeric IDs verify a helpful error, no task-data changes, and return to the menu |
 | FR-007: Input Validation | Test empty, whitespace-only, and valid task titles; verify retry behavior |
 | FR-008: Interactive Menu System | Test menu options, operation routing, looping, and invalid menu input |
 
@@ -709,6 +722,13 @@ Any proposed change to the requirements shall:
 
 ## 10.3 Current Status
 
-**Status:** Initial detailed requirements baseline — pending developer review.
+**Status:** Requirements baseline approved by the developer on 2026-11-04.
 
 This document is the requirements source of truth for the initial Java To-Do application scope.
+
+### Approval Record
+
+| Artifact | Approver | Decision | Date |
+|---|---|---|---|
+| Requirements baseline (`docs/requirements.md`) | Developer | Approved | 2026-11-04 |
+| Derived user-story baseline (`docs/user-stories.md`) | Developer | Ratified as derived stories; original historical artifact was not recovered | 2026-11-09 |

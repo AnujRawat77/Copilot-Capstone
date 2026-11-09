@@ -1,4 +1,5 @@
 # Software Architecture Document
+
 ## Agentic SDLC — Java To-Do Application
 
 | Document Information | Value |
@@ -6,7 +7,7 @@
 | Project | Agentic SDLC — Java To-Do Application |
 | Document | Software Architecture Document |
 | Version | 1.0 |
-| Status | Initial Baseline — Pending Review |
+| Status | Approved by developer on 2026-11-04 |
 | Language | Java 21 |
 | Build Tool | Maven |
 | Testing Framework | TestNG |
@@ -190,40 +191,41 @@ agentic-todo-java/
 │   ├── requirements.md
 │   ├── architecture.md
 │   ├── design-review.md
-│   └── implementation-plan.md
+│   ├── implementation-plan.md
+│   └── user-stories.md
 ├── src/
 │   ├── main/
 │   │   └── java/
-│   │       └── com/
+│   │       └── org/
 │   │           └── capstone/
-│   │               └── todo/
-│   │                   ├── Main.java
-│   │                   ├── model/
-│   │                   │   └── Task.java
-│   │                   ├── service/
-│   │                   │   └── TodoService.java
-│   │                   └── ui/
-│   │                       └── ConsoleUI.java
+│   │               ├── Main.java
+│   │               ├── model/
+│   │               │   └── Task.java
+│   │               ├── service/
+│   │               │   └── TodoService.java
+│   │               └── ui/
+│   │                   └── ConsoleUI.java
 │   └── test/
 │       └── java/
-│           └── com/
+│           └── org/
 │               └── capstone/
-│                   └── todo/
-│                       ├── model/
-│                       └── service/
-│                           └── TodoServiceTest.java
+│                   ├── model/
+│                   └── service/
+│                       └── TodoServiceTest.java
 ├── pom.xml
 └── README.md
 ```
+
+The repository already contains `src/main/java/org/capstone/Main.java`; therefore, the recommended root package is `org.capstone`, with `model`, `service`, and `ui` subpackages. The `README.md` entry is optional and deferred; it is not required for the initial implementation.
 
 ## 4.2 Package Responsibilities
 
 | Package | Responsibility |
 |---|---|
-| `com.capstone.todo` | Application entry point |
-| `com.capstone.todo.model` | Task data representation |
-| `com.capstone.todo.service` | Task-management business logic |
-| `com.capstone.todo.ui` | Console interaction |
+| `org.capstone` | Application entry point |
+| `org.capstone.model` | Task data representation |
+| `org.capstone.service` | Task-management business logic |
+| `org.capstone.ui` | Console interaction |
 | Corresponding test packages | Automated verification |
 
 The structure may be adjusted if implementation reveals a clear need, but unnecessary packages shall not be introduced.
@@ -585,12 +587,18 @@ No task shall be created from invalid input.
 
 ## 8.2 Invalid Task ID
 
-When the requested task ID does not exist:
+When a numeric task ID does not identify an existing task:
 
 - The service shall indicate that the task was not found.
 - The UI shall display the exact message `Task ID not found`.
 - The application shall remain operational.
 - The menu shall continue after the handled error.
+
+When the user enters a non-numeric task ID during completion or deletion:
+
+- The UI shall display a helpful input error.
+- No task data shall be added, changed, or deleted.
+- The application shall return to the menu and remain operational.
 
 ## 8.3 Invalid Menu Input
 
@@ -645,6 +653,7 @@ They should cover:
 - Invalid menu input
 - Task-title retry behavior
 - Invalid task-ID message
+- Non-numeric task-ID input during completion and deletion, including a helpful error, unchanged task data, and return to the menu
 - Returning to the menu after handled errors
 - Exit behavior
 
@@ -658,7 +667,7 @@ The expected verification command is:
 mvn test
 ```
 
-The implementation and verification agents shall report whether the command was actually executed and whether it passed.
+The Testing Agent shall report whether the command was actually executed and whether it passed. The Orchestrator shall coordinate final verification using those results and the Code Review findings; a separate Verification Agent is not required.
 
 ---
 
@@ -766,4 +775,22 @@ The architecture is ready for implementation planning when:
 - No unnecessary application complexity has been introduced.
 - The developer has reviewed the architecture.
 
-**Current Status:** Initial architecture baseline — pending independent design review and developer approval.
+**Current Status:** Architecture baseline approved by the developer on 2026-11-04. The implementation plan was approved by the developer on 2026-11-05, and TASK-12 was completed on 2026-11-09. The independent design review remains pending.
+
+## 13.1 Approval Record
+
+Artifact
+
+Approver
+
+Decision
+
+Date
+
+Architecture baseline (`docs/architecture.md`), including the `org.capstone` package layout and in-memory storage
+
+Developer
+
+Approved
+
+2026-11-04
