@@ -6,16 +6,16 @@
 | Project | Agentic SDLC — Java To-Do Application |
 | Document | Software Design Review |
 | Version | 1.0 |
-| Status | Preliminary Review — Pending Independent Agent Review |
-| Review Type | Requirements and Architecture Review |
+| Status | Design formally approved by the human on 2026-11-09; GitHub PR review authorized, merging not authorized |
+| Review Type | Requirements, architecture, implemented source, and test review |
 | Reviewer | Capstone Developer / Design Review Agent |
-| Review Baseline | Requirements v1.0 and Architecture v1.0 |
+| Review Baseline | Approved requirements and architecture; current implemented source and tests; human-approved FR-007 clarification |
 
 ---
 
 # 1. Review Purpose
 
-The purpose of this review is to evaluate the proposed architecture before implementation begins.
+The original purpose was to evaluate the proposed architecture before implementation. This document now also records the post-implementation independent Design Review and focused follow-up conducted on 2026-11-09 against requirements, architecture, implemented source code, and tests.
 
 The review checks whether the design:
 
@@ -27,9 +27,11 @@ The review checks whether the design:
 - Provides a clear implementation path.
 - Supports the capstone's Agentic SDLC objectives.
 
-This document records a preliminary review. The actual Design Review Agent shall independently evaluate the artifacts and may add, modify, or reject findings.
+Sections 2 through 13 retain the preliminary review history. Section 14 records the subsequent independent review, findings, corrections, and focused follow-up. Agent recommendations are not formal human approval.
 
 # 2. Review Scope
+
+This section records the original preliminary scope. The post-implementation scope, including implemented source code and tests, is recorded in section 14.
 
 ## 2.1 Included
 
@@ -489,9 +491,62 @@ This document is a preliminary baseline and shall not be represented as the outp
 
 ## 13.3 Approval Record
 
+The following table preserves the original preliminary approval state; it is not the current project status. See section 14 for the subsequent review and current approval boundary.
+
 | Role | Status |
 |---|---|
 | Developer | Pending |
 | Design Review Agent | Pending independent review |
 | Architecture baseline | Draft |
 | Implementation planning | Awaiting approval |
+
+---
+
+# 14. Post-Implementation Independent Design Review - 2026-11-09
+
+## 14.1 Scope and Evidence
+
+The independent Design Review assessed approved FR-001 through FR-008, architecture and component responsibilities, implemented Java source, TestNG tests, important edge cases, and recorded verification evidence. This was an implementation-based review, not only an evaluation of the proposed design.
+
+Inputs included `docs/requirements.md`, `docs/architecture.md`, this historical review artifact, `docs/implementation-plan.md`, `Main`, `ConsoleUI`, `TodoService`, `Task`, `TodoServiceTest`, and `ConsoleUITest`. The focused follow-up inspected the actual current working-tree files after the authorized corrections rather than relying only on an implementation summary.
+
+The initial post-implementation recommendation was **Changes Requested**. The principal concern was mutable task objects escaping the service boundary (DR-019); the review also identified ambiguous whitespace semantics (DR-020) and this document's stale pre-implementation framing (DR-021). These findings are retained below rather than erased by their corrections.
+
+## 14.2 Findings and Dispositions
+
+| Finding | Original severity | Original concern | Correction and current disposition |
+|---|---|---|---|
+| DR-019 | Medium | `addTask()` and `getAllTasks()` exposed mutable service-owned `Task` objects, allowing callers to bypass service operations. | Resolved in the independent focused follow-up. `Task` is final with final fields; `completedCopy()` returns a new completed value. `TodoService.completeTask()` replaces only the matching stored task, and `getAllTasks()` retains its unmodifiable list copy. |
+| DR-020 | Low | FR-007 did not define whether whitespace meant Java `String.trim()` semantics or broader Unicode whitespace handling. | Resolved in the independent focused follow-up. The human approved U+0000 through U+0020 boundary trimming, rejection of an empty result, preservation of interior characters, and no broader Unicode whitespace handling. FR-007 and its acceptance criteria record that clarification; the implementation and focused tests agree. |
+| DR-021 | Low | This artifact described only a preliminary review before source code existed and did not reflect the actual review stage. | Addressed by this documentation update: current status and scope are identified, the executed review and focused follow-up are recorded, and the original preliminary history is retained. This documentation disposition is not an independent re-review or formal human Design Review approval. |
+
+### DR-019 Evidence
+
+- `src/main/java/org/capstone/model/Task.java`: immutable fields, preserved getters and incomplete-task constructor behavior, and non-mutating `completedCopy()`.
+- `src/main/java/org/capstone/service/TodoService.java`: matching-task replacement during completion and an unmodifiable list copy for retrieval.
+- `src/test/java/org/capstone/service/TodoServiceTest.java`: unchanged creation results and prior list elements, fresh completed results, preservation of IDs and titles, replacement of only the selected task, and isolation from caller-created completed copies. Existing collection-immutability coverage remains intact.
+
+### DR-020 Evidence
+
+- `docs/requirements.md`, FR-007: explicit `String.trim()` semantics and the human's clarification approval dated 2026-11-09.
+- `TodoService.addTask()`: `String.trim()` validation and storage match the clarified requirement.
+- `TodoServiceTest`: focused cases for U+0000/U+0020 boundary trimming, surrounding spaces and tabs, interior-tab preservation, and unchanged acceptance of U+2003 EM SPACE and U+00A0 NO-BREAK SPACE. Empty-title and spaces/tabs-only rejection tests remain and verify no task is created.
+- `ConsoleUITest`: existing invalid-title retry, staged prompt-order, and EOF behavior tests remain intact.
+
+## 14.3 Independent Follow-Up Recommendation and Verification
+
+The independent focused follow-up recommended **DR-019 resolved** and **DR-020 resolved**, with no remaining corrective action identified within that scope. It found the implementation and approved requirements consistent and the tests adequate for both findings. This was a finding-specific recommendation, not an unrestricted final Design Review approval.
+
+The recorded execution command was `mvn -o "-Dtest=TodoServiceTest,ConsoleUITest" test`: **BUILD SUCCESS; 32 passed, 0 failures, 0 errors, 0 skipped** (20 service tests and 12 UI tests). The follow-up reviewer inspected the existing Surefire report and did not rerun tests. No additional test execution is claimed by this documentation update.
+
+Verification used JDK 25 with Java release target 21. Build and runtime verification on an installed JDK 21, and packaging, remain unverified. These local results are not GitHub CI evidence.
+
+## 14.4 Current Status and Approval Boundary
+
+The post-implementation independent review and its focused follow-up have occurred. DR-019 and DR-020 were independently assessed as resolved; DR-021 is addressed by this documentation update. The historical preliminary findings and initial Changes Requested recommendation remain part of the record.
+
+At the time of the documentation update addressing DR-021, formal human Design Review approval was pending. Approval of the FR-007 clarification and authorization of individual corrections did not themselves constitute approval of the entire Design Review.
+
+**Formal human approval - 2026-11-09:** After reviewing the updated Design Review, the human formally approved the design, accepted DR-019 and DR-020 as resolved and DR-021 as addressed, and approved proceeding to the GitHub PR review stage.
+
+This approval is a human Design Review decision, separate from the independent agent recommendations. It does not constitute overall project completion, GitHub PR approval, or authorization to merge the PR.
