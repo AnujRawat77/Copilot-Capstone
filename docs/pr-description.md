@@ -2,7 +2,9 @@
 
 **Status:** TASK-12 completion was explicitly accepted by the human on 2026-11-09. At the time this description was drafted, PR documentation was prepared but no PR had been created and PR creation had not been authorized.
 
-**Current PR state:** PR #1, “Implement Java console todo application,” has since been created and is open against `main`. This current-state note does not change the historical TASK-12 approval record.
+**Historical pre-merge PR state:** PR #1, “Implement Java console todo application,” had been created and was open against `main`.
+
+**Current repository-draft state (2026-11-09):** PR #1 subsequently merged into `main` at `951f3d45dec757103e3d1a8a00a659d63c61b1d7`, as verified in the prior read-only closure review. No formal GitHub approval review was recorded; the human Design Review approval is separate. The merge event does not establish a separately documented prior merge authorization. This update changes only the repository draft; the live PR description was not accessed or edited.
 
 ## Purpose
 
@@ -37,7 +39,9 @@ Java 21 is the configured release target. Maven manages the build, TestNG runs a
 
 The approved requirements and architecture baselines, design-review artifact, and implementation plan provide the project context. TASK-01 through TASK-12 are recorded complete. The human explicitly accepted the TASK-12 completion assessment on 2026-11-09. This does not declare overall project completion or authorize PR creation.
 
-The recorded workflow includes role-based requirements and architecture work, design review, incremental authorized implementation, Testing verification, independent Code Review, approved defect corrections, retesting, and Orchestrator assessment. Human decisions authorize stage transitions and corrections; agent recommendations do not replace approval. The design-review artifact remains preliminary and explicitly states that independent Design Review Agent review is pending; this PR does not claim that review was completed or approved.
+The recorded workflow includes role-based requirements and architecture work, design review, incremental authorized implementation, Testing verification, independent Code Review, approved defect corrections, retesting, and Orchestrator assessment. Human decisions authorize stage transitions and corrections; agent recommendations do not replace approval. Historically, when this draft was prepared, the design-review artifact was preliminary and independent Design Review remained pending.
+
+**Subsequent Design Review (2026-11-09 reconciliation):** The independent review assessed implemented source, requirements, and tests. Its focused follow-up recommended DR-019 (immutable tasks and service-state isolation) and DR-020 (explicit Java `String.trim()` semantics and coverage) resolved. DR-021 was addressed by updating the review artifact while preserving history. The human formally approved the design on 2026-11-09, accepted these dispositions, and authorized PR review. That decision was not GitHub PR approval, merge authorization, or formal project closure.
 
 Notable review and correction history:
 
@@ -58,6 +62,7 @@ These are existing execution records, not tests performed while drafting this de
 | Staged-input regression before the prompt fix | 1 test, 1 failure, 0 errors, 0 skipped; detected the original prompt-order defect. |
 | `mvn -o -Dtest=ConsoleUITest test` after the prompt fix | BUILD SUCCESS; 12 passed, 0 failures, 0 errors, 0 skipped. |
 | `mvn clean test` after the prompt fix | BUILD SUCCESS, exit code 0; 25 passed, 0 failures, 0 errors, 0 skipped. |
+| Later local DR-019/DR-020 verification: `mvn -o "-Dtest=TodoServiceTest,ConsoleUITest" test` | BUILD SUCCESS; 32 passed, 0 failures, 0 errors, 0 skipped (20 service and 12 UI). Recorded in `design-review.md`, section 14.3; not GitHub-hosted CI. |
 | New regression tests | `addTaskPromptsBeforeReadingTitleAndRetryInput` and `addTaskHandlesEndOfInputBeforeTitleOrRetryWithoutCreatingTask` both passed. |
 | New scripted integration run reported by the Testing Agent | `java -cp target/classes org.capstone.Main` succeeded with exit code 0 and empty stderr. The report records 17 menu displays for 17 selections after correcting the harness's mistaken expected count of 14 and rerunning successfully. Covered empty list, blank-title retry, trimmed creation, nonnumeric and nonexistent numeric IDs on Complete and Delete (including exact missing-ID errors), menu continuity, completion status, deletion/list-empty behavior, ID 2 after deleting ID 1, and normal Exit. This is reported Testing Agent evidence, not a run by Documentation. |
 | Documentation correction whitespace check | `git diff --check -- docs/implementation-plan.md` passed, exit code 0. |
@@ -72,6 +77,10 @@ The full suite covers service operations, title validation, task-ID uniqueness/n
 - Existing staged, unstaged, and untracked work requires explicit scope review before any future staging or PR creation. This draft is not an authoritative list of a committed PR diff.
 - A changelog is conditional in the plan; no mandatory standalone changelog convention was identified, so none was prepared.
 - Individual checklist review actions may remain pending. The human accepted TASK-12 completion on 2026-11-09; this is not overall project completion. **PR creation requires separate explicit human approval.**
+
+**Human limitation decisions - 2026-11-09:** The human explicitly accepted installed-JDK-21 verification and packaging verification as unverified limitations, and accepted that no integration rerun was performed after DR-019/DR-020. The earlier separate post-prompt-fix integration report is not verification of the later corrective changes. The human also acknowledged that no GitHub-hosted CI checks were available. Acceptance is not evidence that any of these checks passed.
+
+**Approval reconciliation - 2026-11-09:** Separate human PR-creation authorization is recorded in `reviewer-checklist.md`; the earlier no-authorization statements above describe the draft's original approval boundary, not the current PR state. Formal capstone closure remains pending human approval, and direct reviewer actions remain identified in the checklist. See the supplemental human decision record in `implementation-plan.md`.
 
 ## Evidence Sources
 

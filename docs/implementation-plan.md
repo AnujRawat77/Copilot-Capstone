@@ -867,13 +867,32 @@ The implementation has been reviewed, verified, and prepared for the capstone's 
 
 **Approval boundary:** TASK-12 completion is recorded, not overall project completion or PR creation approval. At the time this assessment was recorded, no PR had been created. Existing staged, unstaged, and untracked work remained subject to explicit scope review before any separately authorized staging or PR action.
 
-**Current PR state (2026-11-09):** PR #1, “Implement Java console todo application,” has since been created and is open against `main`. This update records the current PR state and does not alter the dated TASK-12 assessment or its historical evidence.
+**Historical pre-merge PR state (2026-11-09):** PR #1, “Implement Java console todo application,” had been created and was open against `main`. This records the state before the subsequent merge and does not alter the dated TASK-12 assessment or its historical evidence.
 
 #### Supplemental Scripted Main Integration Verification — report received 2026-11-09
 
 The Testing Agent later reported a separate scripted integration run using `java -cp target/classes org.capstone.Main`. The execution date was not separately recorded. The report states that the process exited with code 0 and empty stderr. The scenario covered empty-list output; blank-title rejection and retry; trimmed task creation; nonnumeric and nonexistent numeric IDs for both Complete and Delete, including exact missing-ID messages; menu continuity; completed status display; deletion and an empty subsequent listing; assignment of ID 2 after deleting ID 1; and normal Exit. The report records 17 menu displays for 17 selections. The first harness expectation of 14 displays was corrected, then the scenario was rerun successfully.
 
 This is later Testing Agent-reported evidence and is distinct from the earlier historical integration flow, which was not rerun after the TASK-11 test-only correction or the TASK-12 prompt fix. This supplemental record does not claim that the earlier run was repeated, nor that the Documentation Agent executed this scenario.
+
+#### Supplemental Human Decisions and Documentation Reconciliation - 2026-11-09
+
+The human authorized reconciliation of `docs/reviewer-checklist.md`, `docs/architecture.md`, `docs/pr-description.md`, and this plan. No live GitHub PR-description edit, staging, commit, or push is authorized by this decision.
+
+**Subsequent review and merge:** The implementation-based Design Review and focused follow-up are recorded in [design-review.md](design-review.md), section 14. The human formally approved the design on 2026-11-09, accepted DR-019 and DR-020 as resolved and DR-021 as addressed, and authorized PR review. PR #1 subsequently merged into `main` at `951f3d45dec757103e3d1a8a00a659d63c61b1d7`, as verified in the prior read-only closure review. No formal GitHub approval review was recorded in that review. The merge event is not evidence of a separately documented prior merge authorization; earlier approval boundaries remain historical records.
+
+**Verification evidence:** The historical TASK-12 `mvn clean test` result remains 25 passed, 0 failures, 0 errors, 0 skipped. The later DR-019/DR-020 command, `mvn -o "-Dtest=TodoServiceTest,ConsoleUITest" test`, recorded BUILD SUCCESS with 32 passed, 0 failures, 0 errors, 0 skipped (20 service and 12 UI). These are local results, not hosted CI. This reconciliation performs no new test execution.
+
+| Remaining verification limitation | Explicit human disposition |
+|---|---|
+| Installed-JDK-21 build/runtime verification | Accepted as unverified. Compilation used JDK 25 with Java release target 21; this does not establish verification on an installed JDK 21. |
+| Packaging verification | Accepted as unverified following the earlier offline Maven JAR plugin resolution blocker. |
+| Integration rerun after DR-019/DR-020 | Accepted as unverified: the integration flow was not rerun during the corrective verification. The earlier separate post-prompt-fix Testing Agent run is historical evidence, not a post-DR rerun. |
+| GitHub-hosted CI | The human acknowledged that no hosted checks were available; no hosted pass is claimed. |
+
+Acceptance of these limitations is not evidence that the checks passed. In-memory data loss after exit remains an already approved design limitation under NFR-009 and AD-003, not a newly waived verification gap.
+
+**Closure boundary:** Evidence-backed checklist confirmations are documentation reconciliation, not new independent reviews or human approvals. Direct inspection and reviewer actions without sufficient evidence remain unchecked. Formal capstone closure has not been approved; human review of this reconciliation is required before any separately authorized commit, push, live PR edit, or closure decision. Existing unrelated `.github` working-tree changes must remain preserved.
 
 ---
 
