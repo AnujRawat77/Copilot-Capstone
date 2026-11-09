@@ -429,26 +429,31 @@ For a numeric task ID that does not identify an existing task, the application s
 
 The application shall validate task-name input before creating a task.
 
+For FR-007, trimming uses Java `String.trim()` semantics: remove leading and trailing characters U+0000 through U+0020, inclusive. Preserve interior characters. Characters outside this range are not removed or rejected solely because they resemble whitespace; broader Unicode whitespace handling is not required.
+
 ### Expected Behavior
 
 1. The application receives a task title.
-2. The title is checked after trimming leading and trailing whitespace.
+2. The title is checked after trimming leading and trailing characters U+0000 through U+0020.
 3. If the title is empty after trimming, the application rejects it.
 4. The application displays a validation error.
 5. The application prompts the user to retry.
-6. A task is created only after a valid title is provided.
+6. A task is created only after a valid title is provided, storing the trimmed title without changing interior characters.
 
 ### Acceptance Criteria
 
-- **AC-007.1:** Task titles are validated after trimming leading and trailing whitespace.
+- **AC-007.1:** Task titles are validated using Java `String.trim()` semantics, removing leading and trailing characters U+0000 through U+0020, inclusive.
 - **AC-007.2:** An empty task title is rejected.
-- **AC-007.3:** A whitespace-only task title is rejected.
+- **AC-007.3:** A task title consisting entirely of characters U+0000 through U+0020, including ordinary spaces and tabs, is rejected.
 - **AC-007.4:** The application displays a helpful validation error.
 - **AC-007.5:** The application prompts the user to retry after validation failure.
 - **AC-007.6:** No task is created from invalid input.
 - **AC-007.7:** A valid title is accepted.
-- **AC-007.8:** Leading and trailing whitespace is not retained in the stored task title.
+- **AC-007.8:** Leading and trailing characters U+0000 through U+0020 are not retained in the stored task title; interior characters are preserved.
 - **AC-007.9:** Validation failure does not terminate the application.
+- **AC-007.10:** Characters outside U+0000 through U+0020, including U+2003 EM SPACE and U+00A0 NO-BREAK SPACE, are preserved and do not alone cause title rejection.
+
+**Clarification approval (DR-020) - 2026-11-09:** The human explicitly approved Java `String.trim()` semantics for FR-007, including preservation of interior characters and no broader Unicode whitespace handling. This clarification does not claim new implementation or test verification.
 
 ### Related Requirements
 

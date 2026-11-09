@@ -7,6 +7,8 @@ import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertThrows;
 
@@ -46,6 +48,58 @@ public class TodoServiceTest {
     @Test
     public void addTaskRejectsNullTitleWithoutCreatingTask() {
         assertInvalidTitleDoesNotConsumeTaskId(null);
+    }
+
+    @Test
+    public void addTaskTrimsNullCharactersAndSpacesAroundTitle() {
+        TodoService service = new TodoService();
+
+        Task task = service.addTask("\u0000 Prepare report \u0000");
+
+        assertEquals(task.getTitle(), "Prepare report");
+        assertEquals(service.getAllTasks().get(0).getTitle(), "Prepare report");
+    }
+
+    @Test
+    public void addTaskTrimsSpacesAndTabsAroundTitle() {
+        TodoService service = new TodoService();
+
+        Task task = service.addTask(" \tPrepare report\t ");
+
+        assertEquals(task.getTitle(), "Prepare report");
+        assertEquals(service.getAllTasks().get(0).getTitle(), "Prepare report");
+    }
+
+    @Test
+    public void addTaskPreservesInteriorTabs() {
+        TodoService service = new TodoService();
+
+        Task task = service.addTask("First\tSecond");
+
+        assertEquals(task.getTitle(), "First\tSecond");
+        assertEquals(service.getAllTasks().get(0).getTitle(), "First\tSecond");
+    }
+
+    @Test
+    public void addTaskAcceptsEmSpaceOnlyUnchanged() {
+        TodoService service = new TodoService();
+
+        Task task = service.addTask("\u2003");
+
+        assertEquals(task.getTitle(), "\u2003");
+        assertEquals(service.getAllTasks().size(), 1);
+        assertEquals(service.getAllTasks().get(0).getTitle(), "\u2003");
+    }
+
+    @Test
+    public void addTaskAcceptsNoBreakSpaceOnlyUnchanged() {
+        TodoService service = new TodoService();
+
+        Task task = service.addTask("\u00A0");
+
+        assertEquals(task.getTitle(), "\u00A0");
+        assertEquals(service.getAllTasks().size(), 1);
+        assertEquals(service.getAllTasks().get(0).getTitle(), "\u00A0");
     }
 
     @Test
@@ -94,8 +148,57 @@ public class TodoServiceTest {
 
         assertTrue(service.completeTask(secondTask.getId()));
 
+        List<Task> currentTasks = service.getAllTasks();
+        assertEquals(currentTasks.size(), 2);
+        assertSame(currentTasks.get(0), firstTask);
+        assertFalse(currentTasks.get(0).isCompleted());
+        assertNotSame(currentTasks.get(1), secondTask);
+        assertEquals(currentTasks.get(1).getId(), secondTask.getId());
+        assertEquals(currentTasks.get(1).getTitle(), secondTask.getTitle());
+        assertTrue(currentTasks.get(1).isCompleted());
         assertFalse(firstTask.isCompleted());
-        assertTrue(secondTask.isCompleted());
+        assertFalse(secondTask.isCompleted());
+    }
+
+    @Test
+    public void getAllTasksElementsRemainUnchangedAfterCompletion() {
+        TodoService service = new TodoService();
+        Task addedTask = service.addTask("Existing");
+        List<Task> snapshot = service.getAllTasks();
+        Task snapshotTask = snapshot.get(0);
+
+        assertTrue(service.completeTask(addedTask.getId()));
+
+        assertEquals(snapshot.size(), 1);
+        assertSame(snapshot.get(0), snapshotTask);
+        assertFalse(snapshotTask.isCompleted());
+        Task currentTask = service.getAllTasks().get(0);
+        assertNotSame(currentTask, snapshotTask);
+        assertEquals(currentTask.getId(), snapshotTask.getId());
+        assertEquals(currentTask.getTitle(), snapshotTask.getTitle());
+        assertTrue(currentTask.isCompleted());
+    }
+
+    @Test
+    public void completingReturnedCopiesDoesNotChangeServiceState() {
+        TodoService service = new TodoService();
+        Task addedTask = service.addTask("Existing");
+        Task listedTask = service.getAllTasks().get(0);
+
+        Task addedTaskCopy = addedTask.completedCopy();
+        Task listedTaskCopy = listedTask.completedCopy();
+
+        assertNotSame(addedTaskCopy, addedTask);
+        assertNotSame(listedTaskCopy, listedTask);
+        assertEquals(addedTaskCopy.getId(), addedTask.getId());
+        assertEquals(addedTaskCopy.getTitle(), addedTask.getTitle());
+        assertEquals(listedTaskCopy.getId(), listedTask.getId());
+        assertEquals(listedTaskCopy.getTitle(), listedTask.getTitle());
+        assertTrue(addedTaskCopy.isCompleted());
+        assertTrue(listedTaskCopy.isCompleted());
+        assertFalse(addedTask.isCompleted());
+        assertFalse(listedTask.isCompleted());
+        assertFalse(service.getAllTasks().get(0).isCompleted());
     }
 
     @Test
@@ -154,6 +257,7 @@ public class TodoServiceTest {
         TodoService service = new TodoService();
 
         assertThrows(IllegalArgumentException.class, () -> service.addTask(invalidTitle));
+        assertTrue(service.getAllTasks().isEmpty());
 
         Task validTask = service.addTask("Valid task");
         assertEquals(validTask.getId(), 1);

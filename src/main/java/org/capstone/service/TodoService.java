@@ -27,9 +27,10 @@ public class TodoService {
     }
 
     public boolean completeTask(int taskId) {
-        for (Task task : tasks) {
+        for (int index = 0; index < tasks.size(); index++) {
+            Task task = tasks.get(index);
             if (task.getId() == taskId) {
-                task.markCompleted();
+                tasks.set(index, task.completedCopy());
                 return true;
             }
         }
