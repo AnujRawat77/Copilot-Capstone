@@ -1,6 +1,8 @@
 # TASK-12 Reviewer Checklist
 
-**Status:** TASK-12 completion was accepted by the human on 2026-11-09. This checklist remains a review aid; unchecked verification boxes are pending reviewer actions, not assertions that the implementation failed. Recorded results below are evidence to assess, not new verification or approval. No PR has been created or authorized.
+**Status:** TASK-12 completion was accepted by the human on 2026-11-09. This checklist remains a review aid; unchecked verification boxes are pending reviewer actions, not assertions that the implementation failed. Recorded results below are evidence to assess, not new verification or approval. At the time this checklist was drafted, no PR had been created or authorized.
+
+**Current PR state:** PR #1, “Implement Java console todo application,” has since been created and is open against `main`. This note updates the PR state without changing the historical checklist or TASK-12 approval record.
 
 ## Requirements
 
@@ -60,6 +62,6 @@ Recorded final post-fix command: `mvn clean test` on 2026-11-09, **BUILD SUCCESS
 - [ ] Confirm whether a separate changelog is required. None was created because the reviewed plan makes it conditional and no mandatory repository convention was identified.
 - [x] Have the Orchestrator reassess AC-T12.1 through AC-T12.6 and the Definition of Done; the implementation plan records TASK-12 complete.
 - [x] Obtain explicit human acceptance before recording TASK-12 complete; the human accepted the completion assessment on 2026-11-09. This does not declare overall project completion.
-- [ ] Record separate explicit human approval **before PR creation**. Authorization to prepare these drafts is not authorization to create a PR.
+- [x] Record separate explicit human approval **before PR creation**. The human authorized PR creation before PR #1 was created. This authorization is separate from the human's TASK-12 completion acceptance.
 
-No PR is created or authorized by this checklist. Individual checklist review actions and separate PR-creation approval remain pending.
+This checklist did not create or authorize a PR; those statements record its state when drafted. PR #1 is now open. Individual checklist review actions remain pending.

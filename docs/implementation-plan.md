@@ -865,7 +865,9 @@ The implementation has been reviewed, verified, and prepared for the capstone's 
 
 **Preserved verification limitations:** Verification used JDK 25 with release target 21; build and runtime verification on an installed JDK 21 remain unverified. Packaging remains unverified. The earlier scripted integration flow was not rerun after the test-only correction or the later TASK-12 prompt fix. These limitations remain explicit in the PR documentation and are not represented as passed checks.
 
-**Approval boundary:** TASK-12 completion is recorded, not overall project completion or PR creation approval. No PR has been created. Existing staged, unstaged, and untracked work remains subject to explicit scope review before any separately authorized staging or PR action.
+**Approval boundary:** TASK-12 completion is recorded, not overall project completion or PR creation approval. At the time this assessment was recorded, no PR had been created. Existing staged, unstaged, and untracked work remained subject to explicit scope review before any separately authorized staging or PR action.
+
+**Current PR state (2026-11-09):** PR #1, “Implement Java console todo application,” has since been created and is open against `main`. This update records the current PR state and does not alter the dated TASK-12 assessment or its historical evidence.
 
 #### Supplemental Scripted Main Integration Verification — report received 2026-11-09
 

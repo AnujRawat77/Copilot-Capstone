@@ -1,6 +1,8 @@
 # PR Description Draft: Java To-Do App and Agentic SDLC Evidence
 
-**Status:** TASK-12 completion was explicitly accepted by the human on 2026-11-09. PR documentation is prepared; no PR has been created, and PR creation has not been authorized.
+**Status:** TASK-12 completion was explicitly accepted by the human on 2026-11-09. At the time this description was drafted, PR documentation was prepared but no PR had been created and PR creation had not been authorized.
+
+**Current PR state:** PR #1, “Implement Java console todo application,” has since been created and is open against `main`. This current-state note does not change the historical TASK-12 approval record.
 
 ## Purpose
 
